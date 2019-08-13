@@ -1,35 +1,29 @@
 package org.app.client;
 
-import org.app.Resource;
-
 /**
  * Interface WebClient
  */
 public interface WebClient {
 
-  //
-  // Fields
-  //
+    //
+    // Methods
+    //
 
-  
-  //
-  // Methods
-  //
+    /**
+     * Returns resource from the url
+     *
+     * @param url url of a site
+     * @return resource from url or null if url is not valid
+     */
+    Resource getResource(String url);
 
+    //
+    // Accessor methods
+    //
 
-  //
-  // Accessor methods
-  //
-
-  //
-  // Other methods
-  //
-
-  /**
-   * @return       Recource
-   * @param        url
-   */
-  public Resource getResource(String url);
+    //
+    // Other methods
+    //
 
 
 }
