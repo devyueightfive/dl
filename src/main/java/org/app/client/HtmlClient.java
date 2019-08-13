@@ -1,14 +1,16 @@
 package org.app.client;
 
-import org.app.Resource;
-
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Objects;
 
 
 /**
  * Class HtmlClient
  */
-class HtmlClient implements WebClient {
+public class HtmlClient implements WebClient {
 
     //
     // Fields
@@ -23,7 +25,6 @@ class HtmlClient implements WebClient {
         client = HttpClient.newHttpClient(); //default settings
     }
 
-    ;
     //
     // Methods
     //
@@ -32,9 +33,17 @@ class HtmlClient implements WebClient {
      * @param url
      * @return Recource
      */
+    @Override
     public Resource getResource(String url) {
-        Resource result = new Resource();
-        return result;
+        Objects.requireNonNull(url);
+        String html = getHtml(url);
+        if (html == null) {
+            return null;
+        }
+        Resource r = new Resource();
+        r.setUrl(url);
+        r.setHtml(html);
+        return r;
     }
 
     //
@@ -45,5 +54,21 @@ class HtmlClient implements WebClient {
     // Other methods
     //
 
-
+    /**
+     * Returns string representation of the page
+     */
+    private String getHtml(String url) {
+        Objects.requireNonNull(url);
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .build();
+            HttpResponse < String > response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // on error
+        return null;
+    }
 }
